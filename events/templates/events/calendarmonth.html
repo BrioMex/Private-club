@@ -1,0 +1,11 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+
+    <center>
+        {% comment %} <h1>{{month}}  {{year}} </h1> {% endcomment %}
+        <br>
+        {{calendar_month | safe}}
+    </center>
+
+{% endblock content %}
