@@ -1,7 +1,7 @@
-from datetime import datetime
-from email.policy import default
 from django.shortcuts import render
 from django.utils import timezone
+
+from .models import Event
 
 from calendar import HTMLCalendar
 
@@ -14,3 +14,9 @@ def calendarmonth(request, year: int =int(timezone.now().year), month: int= int(
     calendar_month=HTMLCalendar().formatmonth(theyear=year, themonth=month)
     return render(request, 'events/calendarmonth.html', {'year': year, 
                                                     'month': month, 'calendar_month':calendar_month})
+
+
+def all_events(request):
+    events_list = Event.objects.all()
+    return render(request, 'events/events_list.html', {'events_list': events_list
+                                                    })

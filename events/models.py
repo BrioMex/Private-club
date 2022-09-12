@@ -15,18 +15,6 @@ class MyClubUser(models.Model):
 
 
 
-class Event(models.Model):
-    name = models.CharField('Event Name', max_length=64, blank= False, null= False)
-    date = models.DateTimeField('Event Date', blank=False, null= False)
-    manager = models.ForeignKey(MyClubUser,blank = False, on_delete=models.PROTECT,related_name="user_creator")
-    description =models.TextField(blank=True)
-    attendees = models.ManyToManyField(MyClubUser, blank = True)
-    
-    def __str__(self):
-        return self.name
-
-
-
 class Venue(models.Model):
     name = models.CharField('Venue Name', max_length=64)
     address = models.CharField('Venue Address', max_length=128)
@@ -35,7 +23,21 @@ class Venue(models.Model):
     phoneNumber = models.CharField(validators = [phoneNumberRegex], max_length = 16, unique = True, null=True)
     web = models.URLField('Website Address')
     email =models.EmailField('Email Address', max_length=64)
-    event = models.ForeignKey(Event, blank= True, null=True, on_delete= models.CASCADE)
+    
    
+    def __str__(self):
+        return self.name
+
+
+
+
+class Event(models.Model):
+    name = models.CharField('Event Name', max_length=64, blank= False, null= False)
+    date = models.DateTimeField('Event Date', blank=False, null= False)
+    manager = models.ForeignKey(MyClubUser,blank = False, on_delete=models.PROTECT,related_name="user_creator")
+    description =models.TextField(blank=True)
+    attendees = models.ManyToManyField(MyClubUser, blank = True,related_name="attendees")
+    venue = models.ForeignKey(Venue, blank= False, null=False, on_delete=models.PROTECT,related_name="event_place")
+
     def __str__(self):
         return self.name
