@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.utils import timezone
+from django.http import HttpResponseRedirect
 
 from .models import Event
+from .forms import VenueForm
 
 from calendar import HTMLCalendar
 
@@ -20,3 +22,18 @@ def all_events(request):
     events_list = Event.objects.all()
     return render(request, 'events/events_list.html', {'events_list': events_list
                                                     })
+
+
+def add_venue(request):
+    submitted = False
+    if request.method == "POST":
+        form = VenueForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/add_venue?submitted=True')
+
+    else:
+        form = VenueForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'events/add_venue.html',{'form': form, 'submitted': submitted})
