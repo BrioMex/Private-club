@@ -1,0 +1,20 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+    <center>
+        {% if searched %}
+            <h1>Your search for {{searched}} returned: </h1> <br>
+            {% for venue in venues %}
+            <a href="{% url 'show-venue' venue.id %}">{{venue}}</a> <br>
+            {% endfor %}
+
+        {% else %}
+            <h1>You forgot to write what you are searching for</h1>
+        
+        {% endif %}
+
+        
+    
+    </center>
+
+{% endblock content %}
