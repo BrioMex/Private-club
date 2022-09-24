@@ -56,3 +56,7 @@ def search_venues(request):
         return render(request, 'events/search_venues.html',{'searched': searched, 'venues': venues})
     else:
         return render(request, 'events/search_venues.html',{})
+
+
+def update_venue(request, venue_id):
+    pass
