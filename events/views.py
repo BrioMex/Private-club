@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 from .models import Event, Venue
 from .forms import VenueForm, EventForm
+import csv
 
 from calendar import HTMLCalendar
 
@@ -108,3 +109,28 @@ def delete_venue(request, venue_id):
     else:
         venue.delete()
     return redirect('list-venue')
+
+def venues_text(request):
+    response = HttpResponse(content_type = 'text/plain')
+    response['Content-Disposition'] = 'attachment, filename=venues.text'
+    venues_list = Venue.objects.all().order_by('name')
+    text_venues = []
+    for venue in venues_list:
+        text_venues.append(f'{venue.name}\n')
+        text_venues.append(f'\t{venue.address}\n')
+        text_venues.append(f'\t{venue.zip_code}\n')
+        text_venues.append(f'\t{venue.phoneNumber}\n')
+        text_venues.append(f'\t{venue.web}\n')
+        text_venues.append(f'\t{venue.email}\n\n')
+    response.writelines(text_venues)
+    return response
+
+def venues_csv(request):
+    response = HttpResponse(content_type = 'text/csv')
+    response['Content-Disposition'] = 'attachment, filename=venues.csv'
+    writer = csv.writer(response)
+    venues_list = Venue.objects.all().order_by('name')
+    writer.writerow(['venue name','Adress','Zip Code','Phone Number','Web','Email'])
+    for venue in venues_list:
+        writer.writerow([venue.name,venue.address,venue.zip_code,venue.phoneNumber,venue.web,venue.email])
+    return response
