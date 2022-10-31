@@ -4,9 +4,52 @@
     <center>
         <h1>Venues</h1>
         <br>
+
+<style>
+    #Venues {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 50%;
+    }
+    
+    #Venues td, #Venues th {
+      border: 1px solid #ddd;
+      padding: 8px;
+      align="center"
+    }
+    
+    #Venues tr:nth-child(even){background-color: #f2f2f2;}
+    
+    #Venues tr:hover {background-color: #ddd;}
+    
+    #Venues th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #5F9EA0;
+      color: White;
+    }
+    </style>
+
+    <table id="Venues">
+        <tr align="center">
+          <th >Venue Name</th>
+          <th >Update Venue</th>
+          <th >Delete Venue</th>
+
+        </tr>
         {% for venue in venues_list %}
-            <a href="{% url 'show-venue' venue.id %}">{{venue}}</a> <br>
+        <tr>
+          <td><strong><a href="{% url 'show-venue' venue.id %}">{{venue}}</a></strong></td>
+          <td align="right"><a href="{% url 'update-venue' venue.id %}" class="btn btn-outline-secondary btn-sm">Update</a></td>
+          <td align="right"><a href="{% url 'delete-venue' venue.id %}" class="btn btn-danger btn-sm">Delete</a></td>
+        </tr>
         {% endfor %}
+      </table>
+
+
+
+
     </center>
 
 {% endblock content %}

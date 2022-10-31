@@ -22,7 +22,7 @@
       padding-top: 12px;
       padding-bottom: 12px;
       text-align: left;
-      background-color: #04AA6D;
+      background-color: #483D8B;
       color: white;
     }
     </style>
@@ -37,7 +37,7 @@
         </tr>
         {% for event in events_list %}
         <tr>
-          <td><strong>{{event.name}}</strong></td>
+          <td><a href="{% url 'update-event' event.id %}"> <strong>{{event.name}}</strong> </a></td>
           <td>{{event.date}}</td>
           <td>{{event.manager}}</td>
           <td>

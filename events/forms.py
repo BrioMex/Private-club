@@ -10,7 +10,7 @@ class RequiredInlineFormSet(BaseInlineFormSet):
 
 from django import forms
 from django.forms import ModelForm
-from .models import Venue
+from .models import Venue, Event
 
 
 #create a Venue form
@@ -18,4 +18,16 @@ class VenueForm(ModelForm):
     class Meta:
         model = Venue
         fields = ('name', 'address', 'zip_code', 'phoneNumber', 'web', 'email')
-        
+
+class EventForm(ModelForm):
+    class Meta:
+        model = Event
+        fields = ('name', 'date', 'manager', 'description', 'attendees', 'venue')
+        labels = {
+            'name' : 'name',
+            'date' : 'Date (YYYY-MM-DD HH:MM:SS)',
+            'manager' : 'Manager',
+            'description' : 'description',
+            'attendees' : 'attendees',
+            'venue' : 'Venue',
+        }
