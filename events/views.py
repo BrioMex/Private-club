@@ -1,10 +1,16 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, FileResponse
 
 from .models import Event, Venue
 from .forms import VenueForm, EventForm
 import csv
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import mm
+from reportlab.lib.pagesizes import letter
+
+from django.core.paginator import Paginator
 
 from calendar import HTMLCalendar
 
@@ -42,7 +48,12 @@ def add_venue(request):
 
 
 def list_venues(request):
-    venues_list = Venue.objects.all().order_by('name')
+    #venues_list = Venue.objects.all().order_by('name')
+
+    p = Paginator(Venue.objects.all().order_by('name'), 20)
+    page = request.GET.get('page')
+    venues_list = p.get_page(page)
+
     return render(request, 'events/venues.html', {'venues_list': venues_list
                                                     })
 
@@ -134,3 +145,28 @@ def venues_csv(request):
     for venue in venues_list:
         writer.writerow([venue.name,venue.address,venue.zip_code,venue.phoneNumber,venue.web,venue.email])
     return response
+
+
+def venues_pdf(request):
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+    textobj = c.beginText(mm, mm)
+    textobj.setTextOrigin(mm * 10,mm * 20)
+    textobj.setFont("Helvetica",14)
+    venues_list = Venue.objects.all().order_by('name')
+    text_venues = []
+    for venue in venues_list:
+        text_venues.append(venue.name)
+        text_venues.append("   "+str(venue.address))
+        text_venues.append("   "+str(venue.zip_code))
+        text_venues.append("   "+str(venue.phoneNumber))
+        text_venues.append("   "+str(venue.web))
+        text_venues.append("   "+str(venue.email))
+        text_venues.append("   ")
+    for line in text_venues:
+        textobj.textLine(line)
+    c.drawText(textobj)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+    return FileResponse(buf, as_attachment=True, filename='venues.pdf')
