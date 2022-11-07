@@ -38,6 +38,12 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('events.urls')), #including all urls defined in urls.py from events app
+    path('members/', include('django.contrib.auth.urls')),
+    path('members/', include('members.urls')), #including all urls defined in urls.py from members app
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
+
+admin.site.site_header = "My administration page"
+admin.site.site_title = "My club title"
+admin.site.index_title= "You are in the admin area"
