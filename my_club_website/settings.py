@@ -34,10 +34,10 @@ if 'SECRET_KEY' in os.environ:
 DEBUG = os.environ['DEBUG']
 
 #
-try:
-    ALLOWED_HOSTS = [os.environ['DOMAIN']]
-except:
-    ALLOWED_HOSTS = ["*"]
+#try:
+ALLOWED_HOSTS = [os.environ['DOMAIN']]
+#except:
+#    ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -105,24 +105,17 @@ WSGI_APPLICATION = 'my_club_website.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-try:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ['NAME'],
-            'USER': os.environ['USER_PG'],
-            'PASSWORD': os.environ['PASSWORD'],
-            'HOST': os.environ['HOST'],
-            'PORT': os.environ['PORT'],
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ['NAME'],
+        'USER': os.environ['USER_PG'],
+        'PASSWORD': os.environ['PASSWORD'],
+        'HOST': os.environ['HOST'],
+        'PORT': os.environ['PORT'],
     }
-except:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+}
 
 
 # Password validation
@@ -172,3 +165,5 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT =os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+CSRF_TRUSTED_ORIGINS = ['https://web-production-999e.up.railway.app']
